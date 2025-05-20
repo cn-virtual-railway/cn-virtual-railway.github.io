@@ -57,8 +57,10 @@
             form.action = 'https://payapp.weixin.qq.com/t/webpay';
             form.style.display = 'none';
 
+            const params = new URLSearchParams(body);
+
             // 添加 body 参数到表单
-            params.forEach((value, key) => {
+            body.forEach((value, key) => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = key;

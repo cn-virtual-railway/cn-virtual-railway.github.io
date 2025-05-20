@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>正在跳转到目标页面</title>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const codeUrl = urlParams.get('code_url');
+        if (codeUrl && codeUrl.startsWith('weixin://dl/business')) {
+            window.location.href = codeUrl;
+            document.querySelector('a').href = codeUrl;
+        } else {
+            alert('链接无效');
+            document.querySelector('a').href = '#';
+            document.querySelector('a').textContent = '链接无效';
+        }
+    </script>
+</head>
+
+<body>
+    <p>如果页面没有自动跳转，请<a href="">点击这里</a></p>
+</body>
+
+</html>

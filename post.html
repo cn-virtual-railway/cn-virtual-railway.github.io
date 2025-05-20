@@ -1,0 +1,104 @@
+<template>
+  <div class="app-container">
+    <div class="main-content">
+      <div v-if="loading" class="loading-message">
+        正在处理支付请求，请稍候...
+      </div>
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  data() {
+    return {
+      loading: true,
+      error: ''
+    };
+  },
+  created() {
+    this.handleRedirect();
+  },
+  methods: {
+    handleRedirect() {
+      // 解析 URL 参数
+      const urlParams = new URLSearchParams(window.location.search);
+      const body = urlParams.get('body');
+
+      if (!body) {
+        this.loading = false;
+        this.error = '缺少必要的 body 参数';
+        return;
+      }
+
+      try {
+        // 将 body 参数解析为键值对
+        const params = new URLSearchParams(body);
+        
+        // 创建隐藏表单
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'https://payapp.weixin.qq.com/t/webpay';
+        form.style.display = 'none';
+
+        // 添加 body 参数到表单
+        params.forEach((value, key) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          form.appendChild(input);
+        });
+
+        // 提交表单
+        document.body.appendChild(form);
+        form.submit();
+
+        // 清理 DOM
+        setTimeout(() => {
+          document.body.removeChild(form);
+        }, 1000);
+      } catch (err) {
+        this.loading = false;
+        this.error = `处理支付请求失败: ${err instanceof Error ? err.message : String(err)}`;
+      }
+    }
+  }
+});
+</script>
+
+<style scoped>
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-content {
+  flex: 1;
+  padding: 25px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-message {
+  font-size: 18px;
+  color: #495057;
+}
+
+.error-message {
+  font-size: 18px;
+  color: #e03131;
+}
+</style>

@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>正在跳转到目标页面</title>
     <style>
         body {
@@ -44,17 +47,20 @@
 <body>
     <h1>如果页面没有自动跳转，请<a href="">点击这里</a></h1>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const codeUrl = urlParams.get('code_url');
-        console.log(codeUrl);
-        if (codeUrl && codeUrl.startsWith('weixin://dl/business')) {
-            window.location.href = codeUrl;
-            document.querySelector('a').href = codeUrl;
-        } else {
-            alert('链接无效');
-            document.querySelector('a').href = '#';
-            document.querySelector('a').textContent = '链接无效';
+        function checkAndRedirect() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const codeUrl = urlParams.get('code_url');
+            console.log(codeUrl);
+            if (codeUrl && codeUrl.startsWith('weixin://dl/business')) {
+                window.location.href = codeUrl;
+                document.querySelector('a').href = codeUrl;
+            } else {
+                alert('链接无效');
+                document.querySelector('a').href = '#';
+                document.querySelector('a').textContent = '链接无效';
+            }
         }
+        window.addEventListener('pageshow', checkAndRedirect);
     </script>
 </body>
 

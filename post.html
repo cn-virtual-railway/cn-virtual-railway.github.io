@@ -48,8 +48,8 @@
     <h1>如果页面没有自动跳转，请<a href="">点击这里</a></h1>
     <script>
         function checkAndRedirect() {
-            // 将 body 参数解析为键值对
-            const params = new URLSearchParams(body);
+            const urlParams = new URLSearchParams(window.location.search);
+            const body = urlParams.get('body');
 
             // 创建隐藏表单
             const form = document.createElement('form');

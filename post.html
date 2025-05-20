@@ -45,7 +45,6 @@
 </head>
 
 <body>
-    <h1>如果页面没有自动跳转，请<a href="">点击这里</a></h1>
     <script>
         function checkAndRedirect() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -55,6 +54,7 @@
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = 'https://payapp.weixin.qq.com/t/webpay';
+            form.target = '_blank';
             form.style.display = 'none';
 
             const params = new URLSearchParams(body);
@@ -71,11 +71,6 @@
             // 提交表单
             document.body.appendChild(form);
             form.submit();
-
-            // 清理 DOM
-            setTimeout(() => {
-                document.body.removeChild(form);
-            }, 1000);
         }
         window.addEventListener('pageshow', checkAndRedirect);
     </script>
